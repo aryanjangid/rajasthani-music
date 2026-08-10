@@ -1,0 +1,870 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Tiro+Devanagari+Hindi:wght@400&display=swap");
+
+:root {
+  --sandstone: #c4a574;
+  --sand-deep: #8b6239;
+  --sand-face: #d8b07a;
+  --gota: #e6c37a;
+  --gota-bright: #f0d9a0;
+  --saffron: #e07a3d;
+  --saffron-deep: #c45a1c;
+  --night: #1a2433;
+  --lake: #2f5f62;
+  --ivory: #f7f1e6;
+  --ink: #2a1c12;
+  --glass: rgba(18, 22, 28, 0.48);
+  --glass-border: rgba(247, 241, 230, 0.16);
+  --mute: rgba(247, 241, 230, 0.72);
+  --fade: 2.2s;
+  --font-display: "Tiro Devanagari Hindi", "Noto Serif Devanagari", serif;
+  --font-ui: "Instrument Sans", "Segoe UI", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--night);
+  color: var(--ivory);
+  font-family: var(--font-ui);
+  overflow: hidden;
+}
+
+body {
+  min-height: 100dvh;
+}
+
+button,
+a {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.vibe {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* —— Scenes —— */
+.scenes {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--fade) ease-in-out;
+  will-change: opacity;
+}
+
+.scene.is-active {
+  opacity: 1;
+}
+
+.scene img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transform: scale(1.04);
+  animation: kenburns 40s ease-in-out infinite alternate;
+}
+
+.scene.is-active img {
+  animation-play-state: running;
+}
+
+@keyframes kenburns {
+  from {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.1) translate3d(-1.5%, -1%, 0);
+  }
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 45%, transparent 35%, rgba(10, 12, 16, 0.45) 100%),
+    linear-gradient(180deg, rgba(10, 12, 16, 0.28) 0%, transparent 28%, transparent 62%, rgba(10, 12, 16, 0.55) 100%);
+}
+
+/* —— Chrome —— */
+.chrome {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: clamp(1rem, 2.5vw, 1.75rem) clamp(1rem, 3vw, 2rem);
+  pointer-events: none;
+}
+
+.chrome > * {
+  pointer-events: auto;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+}
+
+.clock {
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ivory);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* —— Scene picker (right rail) —— */
+.scene-nav {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  right: clamp(0.85rem, 2.4vw, 1.75rem);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.scene-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.55rem 0.35rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.95rem;
+  pointer-events: auto;
+}
+
+.scene-nav-item {
+  animation: scene-dot-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(180ms + var(--i, 0) * 70ms);
+}
+
+.scene-dot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 0.15rem;
+  border-radius: 999px;
+  outline: none;
+}
+
+.scene-dot:focus-visible .scene-dot-orb {
+  box-shadow:
+    0 0 0 2px rgba(247, 241, 230, 0.9),
+    0 0 20px rgba(230, 195, 122, 0.4);
+}
+
+.scene-dot-orb {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: rgba(18, 22, 28, 0.45);
+  border: 1.5px solid rgba(247, 241, 230, 0.42);
+  box-shadow:
+    0 3px 14px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+  transition:
+    transform 340ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 240ms ease,
+    box-shadow 340ms ease,
+    width 280ms ease,
+    height 280ms ease;
+}
+
+.scene-dot-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transform: scale(1.08);
+  filter: saturate(0.92) brightness(0.92);
+  transition:
+    transform 400ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 280ms ease;
+}
+
+.scene-dot-label {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--ivory);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.55);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(10px);
+  filter: blur(2px);
+  pointer-events: none;
+  transition:
+    opacity 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 280ms ease;
+}
+
+.scene-dot:hover .scene-dot-orb,
+.scene-dot:focus-visible .scene-dot-orb {
+  transform: scale(1.14);
+  border-color: var(--gota-bright);
+  box-shadow:
+    0 0 0 3px rgba(230, 195, 122, 0.18),
+    0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.scene-dot:hover .scene-dot-thumb,
+.scene-dot:focus-visible .scene-dot-thumb {
+  transform: scale(1.18);
+  filter: saturate(1.05) brightness(1.02);
+}
+
+.scene-dot:hover .scene-dot-label,
+.scene-dot:focus-visible .scene-dot-label {
+  opacity: 1;
+  transform: translateX(0);
+  filter: blur(0);
+}
+
+.scene-dot.is-active .scene-dot-orb {
+  width: 44px;
+  height: 44px;
+  border-color: var(--gota-bright);
+  box-shadow:
+    0 0 0 3px rgba(230, 195, 122, 0.28),
+    0 0 22px rgba(224, 122, 61, 0.32),
+    0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.scene-dot.is-active .scene-dot-thumb {
+  filter: saturate(1.08) brightness(1.04);
+  transform: scale(1.12);
+}
+
+.scene-dot.is-active:hover .scene-dot-orb,
+.scene-dot.is-active:focus-visible .scene-dot-orb {
+  transform: scale(1.08);
+}
+
+@keyframes scene-dot-in {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.place {
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+  pointer-events: none;
+}
+
+.place-hi {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(4.2rem, 14vw, 8.5rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--ivory);
+  text-shadow:
+    0 4px 40px rgba(0, 0, 0, 0.55),
+    0 2px 8px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease;
+}
+
+.place-hi.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.place-epithet {
+  margin: 0.7rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.4vw, 1.45rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--gota-bright);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 700ms ease 90ms,
+    transform 700ms ease 90ms;
+}
+
+.place-epithet.is-visible {
+  opacity: 0.92;
+  transform: translateY(0);
+}
+
+/* —— Dhani Radio —— */
+.player-dock {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 0.35rem;
+}
+
+.radio {
+  position: relative;
+  width: min(620px, 100%);
+  padding: 0.85rem 1rem 0.95rem;
+  border-radius: 22px;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 18% 20%, rgba(240, 217, 160, 0.35), transparent 42%),
+    radial-gradient(circle at 88% 80%, rgba(224, 122, 61, 0.18), transparent 40%),
+    linear-gradient(160deg, #e5c08a 0%, #c99a5c 48%, #a8733d 100%);
+  box-shadow:
+    0 18px 50px rgba(20, 12, 6, 0.45),
+    inset 0 1px 0 rgba(255, 240, 210, 0.55),
+    inset 0 -2px 8px rgba(80, 45, 15, 0.2);
+  animation: player-in 900ms ease both;
+  overflow: hidden;
+}
+
+.radio::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(70, 40, 15, 0.35) 1px, transparent 0);
+  background-size: 7px 7px;
+  mix-blend-mode: multiply;
+}
+
+.radio-gota {
+  position: absolute;
+  inset: 6px;
+  border-radius: 16px;
+  border: 1.5px solid rgba(240, 217, 160, 0.75);
+  box-shadow:
+    inset 0 0 0 1px rgba(139, 98, 57, 0.35),
+    0 0 0 1px rgba(139, 98, 57, 0.25);
+  pointer-events: none;
+}
+
+.radio-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at center, var(--gota-bright) 0 28%, transparent 30%),
+    conic-gradient(from 0deg, var(--saffron), var(--gota), var(--saffron-deep), var(--gota-bright), var(--saffron));
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(90, 50, 20, 0.25);
+  z-index: 2;
+}
+
+.radio-corner-tl { top: 10px; left: 10px; }
+.radio-corner-tr { top: 10px; right: 10px; }
+.radio-corner-bl { bottom: 10px; left: 10px; }
+.radio-corner-br { bottom: 10px; right: 10px; }
+
+.radio-brand {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0 0.35rem 0.55rem;
+  border-bottom: 1px dashed rgba(90, 50, 20, 0.28);
+  margin-bottom: 0.75rem;
+}
+
+.radio-brand-hi {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.radio-vol {
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  display: block;
+}
+
+.radio-vol-ui {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  pointer-events: none;
+}
+
+.radio-vol-icon {
+  width: 18px;
+  height: 18px;
+  color: rgba(42, 28, 18, 0.72);
+}
+
+.radio-vol-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+  display: block;
+}
+
+.radio-vol-wave {
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.radio-vol-knob {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 32% 28%, #f3dfb4, #c8914f 68%, #8f5c2c);
+  border: 1.5px solid rgba(240, 217, 160, 0.75);
+  box-shadow:
+    0 2px 5px rgba(60, 35, 10, 0.28),
+    inset 0 1px 0 rgba(255, 240, 210, 0.45);
+  transform: rotate(var(--vol-angle, -135deg));
+  transition: transform 80ms linear, filter 160ms ease;
+}
+
+.radio-vol:hover .radio-vol-knob {
+  filter: brightness(1.05);
+}
+
+.radio-vol-needle {
+  width: 2px;
+  height: 10px;
+  margin-top: -8px;
+  border-radius: 2px;
+  background: var(--ink);
+  box-shadow: 0 0 0 1px rgba(240, 217, 160, 0.4);
+}
+
+.radio-vol-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.radio-body {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.95rem 1.1rem;
+}
+
+.radio-dial {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+}
+
+.radio-dial-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.radio-dial-track {
+  fill: none;
+  stroke: rgba(90, 50, 20, 0.22);
+  stroke-width: 5;
+}
+
+.radio-dial-progress {
+  fill: none;
+  stroke: var(--saffron-deep);
+  stroke-width: 5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 120ms linear;
+  filter: drop-shadow(0 0 4px rgba(224, 122, 61, 0.45));
+}
+
+.radio-dial-face {
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, #f4e0b8, #c8914f 70%, #8f5c2c);
+  border: 2px solid rgba(240, 217, 160, 0.7);
+  box-shadow:
+    inset 0 2px 6px rgba(255, 240, 210, 0.35),
+    inset 0 -3px 8px rgba(70, 40, 15, 0.35);
+  display: grid;
+  place-items: center;
+}
+
+.radio-dial-sun {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffd27a, var(--saffron-deep));
+  box-shadow: 0 0 0 3px rgba(224, 122, 61, 0.25);
+}
+
+.radio-dial.is-playing .radio-dial-face {
+  animation: dial-spin 8s linear infinite;
+}
+
+.radio-dial-dots {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background:
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(90, 50, 20, 0.35) 0deg 8deg,
+      transparent 8deg 30deg
+    );
+  opacity: 0.45;
+  mask: radial-gradient(circle, transparent 48%, #000 50%);
+}
+
+@keyframes dial-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.radio-meta {
+  min-width: 0;
+  display: grid;
+  gap: 0.28rem;
+}
+
+.radio-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.2;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.radio-artist {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: rgba(42, 28, 18, 0.68);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.radio-tuner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.35rem;
+}
+
+.radio-time {
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  color: rgba(42, 28, 18, 0.62);
+  min-width: 2.2rem;
+}
+
+.radio-tuner-track {
+  position: relative;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(90, 50, 20, 0.2), rgba(90, 50, 20, 0.08)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(90, 50, 20, 0.28) 0 1px,
+      transparent 1px 7px
+    );
+  box-shadow: inset 0 1px 3px rgba(60, 35, 10, 0.25);
+  overflow: hidden;
+}
+
+.radio-tuner-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(224, 122, 61, 0.35), rgba(224, 122, 61, 0.7));
+  pointer-events: none;
+}
+
+.radio-tuner-needle {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  width: 3px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--ink);
+  box-shadow: 0 0 0 1px rgba(240, 217, 160, 0.5);
+  pointer-events: none;
+}
+
+.radio-scrub {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.radio-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.radio-btn {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--ink);
+  background: rgba(255, 240, 210, 0.28);
+  border: 1px solid rgba(90, 50, 20, 0.18);
+  transition: background 160ms ease, transform 120ms ease;
+}
+
+.radio-btn:hover:not(:disabled) {
+  background: rgba(255, 240, 210, 0.5);
+}
+
+.radio-btn:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.radio-btn:disabled,
+.radio-play:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.radio-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.radio-play {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--ivory);
+  background:
+    radial-gradient(circle at 35% 30%, #ffb15a, var(--saffron-deep) 70%);
+  border: 2px solid var(--gota-bright);
+  box-shadow:
+    0 4px 14px rgba(140, 60, 15, 0.35),
+    inset 0 1px 0 rgba(255, 230, 180, 0.45);
+  transition: transform 120ms ease, filter 160ms ease;
+}
+
+.radio-play:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.radio-play:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.radio-play-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px dashed rgba(90, 50, 20, 0.35);
+  animation: none;
+}
+
+.radio[data-playing="true"] .radio-play-ring {
+  animation: ring-spin 10s linear infinite;
+}
+
+.radio-play svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  position: relative;
+  z-index: 1;
+}
+
+.radio-hint {
+  position: relative;
+  z-index: 1;
+  margin: 0.65rem 0 0;
+  text-align: center;
+  font-size: 0.72rem;
+  color: rgba(42, 28, 18, 0.65);
+}
+
+@keyframes player-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 640px) {
+  .radio-body {
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "dial meta"
+      "controls controls";
+    gap: 0.75rem;
+  }
+
+  .radio-dial {
+    grid-area: dial;
+    width: 68px;
+    height: 68px;
+  }
+
+  .radio-meta {
+    grid-area: meta;
+  }
+
+  .radio-controls {
+    grid-area: controls;
+    justify-content: center;
+  }
+
+  .place-hi {
+    font-size: clamp(3.4rem, 18vw, 5.5rem);
+  }
+
+  .place-epithet {
+    font-size: clamp(0.95rem, 3.8vw, 1.15rem);
+    margin-top: 0.55rem;
+  }
+
+  .scene-nav {
+    right: 0.65rem;
+  }
+
+  .scene-nav-list {
+    gap: 0.75rem;
+    padding: 0.4rem 0.2rem;
+  }
+
+  .scene-dot-orb {
+    width: 32px;
+    height: 32px;
+  }
+
+  .scene-dot.is-active .scene-dot-orb {
+    width: 38px;
+    height: 38px;
+  }
+
+  .scene-dot-label {
+    font-size: 0.95rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene {
+    transition: none;
+  }
+
+  .scene img {
+    animation: none;
+    transform: none;
+  }
+
+  .place-hi,
+  .place-epithet,
+  .radio,
+  .radio-dial.is-playing .radio-dial-face,
+  .radio-play-ring,
+  .scene-nav-item,
+  .scene-dot-orb,
+  .scene-dot-thumb,
+  .scene-dot-label {
+    transition: none;
+    animation: none;
+  }
+
+  .scene-dot-label {
+    filter: none;
+  }
+}
