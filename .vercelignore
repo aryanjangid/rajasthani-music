@@ -1,0 +1,4 @@
+node_modules
+.next
+public/music/*.mp3
+public/music/*.MP3

@@ -1,9 +1,17 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "राजस्थान · Rajasthan Vibe",
-  description: "A full-bleed Rajasthani music atmosphere — scenes from Jaipur to the desert.",
+  title: "राजस्थानी संगीत",
+  description: "राजस्थानी संगीत — Jaipur se desert tak, full-bleed Rajasthani music vibes.",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: [{ url: "/icon.png" }],
+  },
 };
 
 export default function RootLayout({
@@ -13,7 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="hi">
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
