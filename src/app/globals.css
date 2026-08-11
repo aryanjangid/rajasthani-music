@@ -155,6 +155,7 @@ a {
   right: clamp(0.85rem, 2.4vw, 1.75rem);
   transform: translateY(-50%);
   pointer-events: none;
+  max-height: calc(100dvh - 7rem);
 }
 
 .scene-nav-list {
@@ -164,8 +165,10 @@ a {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.95rem;
+  justify-content: center;
+  gap: 0.7rem;
   pointer-events: auto;
+  max-height: inherit;
 }
 
 .scene-nav-item {
@@ -280,6 +283,57 @@ a {
 .scene-dot.is-active:hover .scene-dot-orb,
 .scene-dot.is-active:focus-visible .scene-dot-orb {
   transform: scale(1.08);
+}
+
+.scene-nav-auto {
+  margin-top: 0.15rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(247, 241, 230, 0.22);
+}
+
+.scene-dot-auto-orb {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(240, 217, 160, 0.55), rgba(196, 90, 28, 0.85));
+}
+
+.scene-auto-mosaic {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.scene-auto-mosaic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.scene-auto-ring {
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(247, 241, 230, 0.7);
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.scene-dot-auto.is-active .scene-dot-orb {
+  border-color: var(--gota-bright);
+}
+
+.scene-dot-auto.is-active .scene-auto-ring {
+  border-color: var(--gota-bright);
+  animation: scene-auto-spin 8s linear infinite;
+}
+
+@keyframes scene-auto-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes scene-dot-in {
@@ -542,6 +596,7 @@ a {
   position: absolute;
   inset: 12px;
   border-radius: 50%;
+  overflow: hidden;
   background:
     radial-gradient(circle at 35% 30%, #f4e0b8, #c8914f 70%, #8f5c2c);
   border: 2px solid rgba(240, 217, 160, 0.7);
@@ -550,6 +605,15 @@ a {
     inset 0 -3px 8px rgba(70, 40, 15, 0.35);
   display: grid;
   place-items: center;
+}
+
+.radio-dial-cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .radio-dial-sun {
@@ -576,6 +640,12 @@ a {
     );
   opacity: 0.45;
   mask: radial-gradient(circle, transparent 48%, #000 50%);
+  pointer-events: none;
+}
+
+.radio-dial-face:has(.radio-dial-cover) .radio-dial-dots {
+  opacity: 0.22;
+  mix-blend-mode: soft-light;
 }
 
 @keyframes dial-spin {
@@ -695,6 +765,12 @@ a {
 
 .radio-btn:hover:not(:disabled) {
   background: rgba(255, 240, 210, 0.5);
+}
+
+.radio-btn.is-active {
+  background: rgba(224, 122, 61, 0.28);
+  border-color: rgba(196, 90, 28, 0.35);
+  color: var(--saffron-deep);
 }
 
 .radio-btn:active:not(:disabled) {
@@ -859,7 +935,8 @@ a {
   .scene-nav-item,
   .scene-dot-orb,
   .scene-dot-thumb,
-  .scene-dot-label {
+  .scene-dot-label,
+  .scene-auto-ring {
     transition: none;
     animation: none;
   }

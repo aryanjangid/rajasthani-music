@@ -44,4 +44,6 @@ export const scenes: Scene[] = [
   },
 ];
 
+/** Hold time per scene while auto-shuffle is on */
+export const SCENE_DURATION_MS = 14_000;
 export const SCENE_FADE_MS = 2_200;

@@ -15,9 +15,11 @@ function formatTime(seconds: number) {
 function Dial({
   progress,
   playing,
+  cover,
 }: {
   progress: number;
   playing: boolean;
+  cover?: string;
 }) {
   const radius = 34;
   const circumference = 2 * Math.PI * radius;
@@ -37,7 +39,12 @@ function Dial({
         />
       </svg>
       <div className="radio-dial-face">
-        <span className="radio-dial-sun" />
+        {cover ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img className="radio-dial-cover" src={cover} alt="" draggable={false} />
+        ) : (
+          <span className="radio-dial-sun" />
+        )}
         <span className="radio-dial-dots" />
       </div>
     </div>
@@ -221,7 +228,7 @@ export function Player() {
       </div>
 
       <div className="radio-body">
-        <Dial progress={progress} playing={playing} />
+        <Dial progress={progress} playing={playing} cover={track?.cover} />
 
         <div className="radio-meta">
           <p className="radio-title">{track?.title ?? "Tune in soon"}</p>
