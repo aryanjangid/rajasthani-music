@@ -22,10 +22,6 @@
 .DS_Store
 *.pem
 
-# local audio (keep out of git)
-/public/music/*.mp3
-/public/music/*.MP3
-
 # debug
 npm-debug.log*
 yarn-debug.log*
